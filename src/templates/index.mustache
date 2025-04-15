@@ -1,28 +1,51 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Estim8 - Accueil</title>
+    <title>{{siteName}} - Accueil</title>
+    <link href="/css/main.css" rel="stylesheet" />
+    <link href="/css/site.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alata&family=Roboto:ital,wght@0,200;1,200&display=swap" rel="stylesheet">
   </head>
-  <body>
-    <h1>Bienvenue sur Estim8</h1>
-
+  <body class="bg-white text-gray-800 gradient-background">
+    <div class="bg-sky-900 text-white p-2 shadow">
+      <h1 class="text-lg title-font">Bienvenue sur {{siteName}}</h1>
+    </div>
     {{#error}}<p style="color: red;">{{error}}</p>{{/error}}
+    <div class="mt-40 mx-auto w-96 p-4 bg-white shadow-md rounded-lg text-font text-base">
+      <form id="index-form" method="POST" action="/join">
 
-    <form method="POST" action="/join">
-      <label>Pseudo :</label>
-      <input type="text" name="pseudo" value="{{pseudo}}" required />
-
-      <div>
-        <button type="submit" name="action" value="create">Créer une room</button>
-      </div>
-
-      <hr />
-
-      <label>Code de room :</label>
-      <input type="text" name="roomCode" placeholder="ex: green-tiger-12" value="{{prefillRoomCode}}" />
-      <div>
-        <button type="submit" name="action" value="join">Rejoindre une room</button>
-      </div>
-    </form>
+        <div class="mb-3">
+          <label class="block text-center font-bold">Pseudo</label>
+        </div>
+        <div >
+          <input class="w-full text-center border border-gray-300 px-2 py-1 rounded-sm outline-none" autocomplete="off" type="text" name="pseudo" value="{{pseudo}}" required />
+        </div>
+        <div class="mb-3 mt-4 flex flex-row">
+          <div class="basis-1/2 text-center">
+            <input onClick="index_radio_clicked()" type="radio" name="action" value="create" id="create" checked />&nbsp;Créer une room
+          </div>
+          <div class="basis-1/2 text-center">
+            <input onClick="index_radio_clicked()" type="radio" name="action" value="join" id="join" />&nbsp;Rejoindre une room
+          </div>
+        </div>
+        <hr />
+        <div id="join-room-div" class="mb-2 mt-4" style="display: none;">
+          <div class="mb-3">
+            <label class="block text-center font-bold">Code de la room</label>
+          </div>
+          <div >
+            <input id="join-room-input" class="w-full text-center border border-gray-300 px-2 py-1 rounded-sm outline-none" placeholder="ex: green-tiger-12" autocomplete="off" type="text" name="roomCode" value="{{prefillRoomCode}}" />
+          </div>
+          <hr class="mt-3 mb-3"/>
+        </div>
+        <div>
+          <button id="submit-button" class="border border-sky-700 px-3 block w-full bg-sky-600 text-white py-2" type="submit" name="action" value="join">Créer une room</button>
+        </div>
+      </form>
+    </div>
+    <script src="/js/index.js"></script>
   </body>
 </html>

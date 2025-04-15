@@ -6,6 +6,7 @@ import dotenv from 'dotenv'
 
 import indexRoutes from './routes/index'
 import roomRoutes from './routes/room';
+import Configuration from './configuration/Configuration'
 
 dotenv.config()
 
@@ -21,7 +22,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || 'estim8-secret',
+    secret: Configuration.getSessionSecret(),
     resave: false,
     saveUninitialized: true
   })

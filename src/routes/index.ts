@@ -1,10 +1,12 @@
 import { Router, Request, Response } from 'express';
 import RoomManager from '../core/RoomManager';
+import Configuration from '../configuration/Configuration';
 
 const router = Router();
 
 router.get('/', (req: Request, res: Response) => {
   res.render('index', {
+    siteName: Configuration.getSiteName(),
     pseudo: req.session.pseudo,
     error: req.session.error,
     prefillRoomCode: req.session.prefillRoomCode,

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Estim8 - Accueil</title>
+  </head>
+  <body>
+    <h1>Bienvenue sur Estim8</h1>
+    {{#pseudo}}
+      <p>Bonjour {{pseudo}} ! <a href="/room">Rejoindre la room</a></p>
+    {{/pseudo}}
+    {{^pseudo}}
+      <form method="POST" action="/join">
+        <label for="pseudo">Entrez votre pseudo :</label>
+        <input type="text" name="pseudo" id="pseudo" />
+        <button type="submit">Rejoindre</button>
+      </form>
+      {{#error}}<p style="color: red;">{{error}}</p>{{/error}}
+    {{/pseudo}}
+  </body>
+</html>

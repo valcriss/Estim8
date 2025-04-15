@@ -19,12 +19,12 @@ class RoomManager {
     return this.rooms.get(id);
   }
 
-  joinRoom(roomId: string, participantName: string): Participant | null {
+  joinRoom(roomId: string, clientId:string, participantName: string): Participant | null {
     const room = this.rooms.get(roomId);
     if (!room) return null;
 
     const participant: Participant = {
-      id: randomUUID(),
+      id: clientId,
       name: participantName,
     };
 

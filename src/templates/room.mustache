@@ -30,6 +30,7 @@
     </div>
 
     <p>
+      <button onclick="startEstimation()">Révéler les votes</button>
       <button onclick="revealVotes()">Révéler les votes</button>
     </p>
 
@@ -44,42 +45,46 @@
       }
     </script>
     <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/clientId.js"></script>
     <script>
       const socket = io();
       const roomId = '{{roomId}}';
       const pseudo = '{{currentName}}';
       const participantId = '{{participantId}}';
-      
-      socket.emit('join-room', { roomId, pseudo });
+      const clientId = getClientId();
+      let roomParticipants = {}
+      socket.emit('join-room', { roomId, clientId, pseudo });
 
       // Remplacer toute la liste au début
-      socket.on('room-participants', ({ participants }) => {
-        const ul = document.getElementById('participants');
-        ul.innerHTML = ''; // reset
-        participants.forEach((p) => {
-          const li = document.createElement('li');
-          li.innerText = p.name;
-          ul.appendChild(li);
+     socket.on('room-participants', ({ participants }) => {
+      console.log('room-participants',participants)
+      roomParticipants = {}
+      participants.forEach((p) => {
+          roomParticipants[p.id] = p.name;
         });
+      updateParticipantsList()
       });
 
       // Mise à jour live
-      socket.on('participant-joined', ({ name }) => {
-        const ul = document.getElementById('participants');
-        const li = document.createElement('li');
-        li.innerText = name;
-        ul.appendChild(li);
+      socket.on('participant-joined', ({ name, id }) => {
+        console.log('participant-joined',name,id)
+        roomParticipants[id] = name;
+        updateParticipantsList()
       });
 
       socket.on('participant-left', ({ name }) => {
-        const ul = document.getElementById('participants');
-        const items = ul.getElementsByTagName('li');
-        for (const item of items) {
-          if (item.innerText === name) {
-            ul.removeChild(item);
-            break;
+        console.log('participant-left',name)
+        let toDelete = null
+        for (const [pId, pName] of Object.entries(roomParticipants)) {
+          if (pName === name) {
+            toDelete = key;
           }
         }
+        if(toDelete != null)
+        {
+          delete roomParticipants[toDelete]
+        }
+        updateParticipantsList()
       });
 
       socket.on('votes-revealed', ({ votes }) => {
@@ -96,6 +101,18 @@
         console.log(`🔒 ${participantId} a voté`);
       });
 
+      function updateParticipantsList()
+      {
+        const ul = document.getElementById('participants');
+        ul.innerHTML = '';
+        for (const [pId, pName] of Object.entries(roomParticipants)) {
+          const li = document.createElement('li');
+          li.innerText = pName;
+          li.dataset.pid = pId;
+          ul.appendChild(li);
+        };
+      }
+
       function vote(value) {
         console.log(`🔒 Envoi ${pseudo} a voté ${value}`);
         socket.emit('vote', { roomId, participantId, value });
@@ -104,6 +121,15 @@
       function revealVotes() {
         socket.emit('reveal-votes', roomId);
       }
+
+      function startEstimation() {
+        socket.emit('start-estimation', roomId);
+      }
+
+      socket.on('estimation-started', () => {
+        alert('Nouvelle estimation lancée !');
+        // Tu peux ici réinitialiser l’UI si tu veux
+      });
 
 
     </script>

@@ -23,7 +23,10 @@ export interface Participant {
     }
   
     removeParticipant(id: string) {
+      console.log(this.participants)
+      console.log("removing id", id)
       this.participants = this.participants.filter((p) => p.id !== id);
+      console.log(this.participants)
     }
 
     removeParticipantByName(name: string) {

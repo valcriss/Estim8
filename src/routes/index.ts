@@ -1,25 +1,41 @@
-import { Router, Request, Response } from 'express'
+import { Router, Request, Response } from 'express';
+import RoomManager from '../core/RoomManager';
 
-const router = Router()
+const router = Router();
 
 router.get('/', (req: Request, res: Response) => {
-  const pseudo = req.session?.pseudo
-  res.render('index', { pseudo })
-})
+  res.render('index', {
+    pseudo: req.session.pseudo,
+    error: req.session.error,
+    prefillRoomCode: req.session.prefillRoomCode,
+  });
+  delete req.session.error;
+  delete req.session.prefillRoomCode;
+});
 
+// Soumission du pseudo
 router.post('/join', (req: Request, res: Response) => {
-  const pseudo = req.body.pseudo?.trim()
-  if (pseudo) {
-    req.session.pseudo = pseudo
-    res.redirect('/room')
-  } else {
-    res.render('index', { error: 'Veuillez entrer un pseudo.' })
+  const pseudo = req.body.pseudo?.trim();
+  const action = req.body.action;
+  const roomCode = req.body.roomCode?.trim();
+
+  if (!pseudo) {
+    req.session.error = 'Veuillez entrer un pseudo.';
+    return res.redirect('/');
   }
-})
 
-router.get('/room', (req: Request, res: Response) => {
-  if (!req.session?.pseudo) return res.redirect('/')
-  res.render('room', { pseudo: req.session.pseudo })
-})
+  req.session.pseudo = pseudo;
 
-export default router
+  if (action === 'create') {
+    return res.redirect('/room/new');
+  }
+
+  if (action === 'join' && roomCode) {
+    return res.redirect(`/room/${roomCode}`);
+  }
+
+  req.session.error = 'Code de room invalide.';
+  return res.redirect('/');
+});
+
+export default router;

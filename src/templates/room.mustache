@@ -1,11 +1,111 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Estim8 - Room</title>
+    <title>Room {{roomName}} - Estim8</title>
   </head>
   <body>
-    <h1>Room Estim8</h1>
-    <p>Connecté en tant que <strong>{{pseudo}}</strong></p>
-    <p>Prochaine étape : affichage des tickets, vote en temps réel, etc.</p>
+    <h1>Room : {{roomName}}</h1>
+    <p>ID : <strong>{{roomId}}</strong></p>
+    <p>
+      Lien de partage :
+      <code id="room-link">http://localhost:3000/room/{{roomId}}</code>
+      <button onclick="copyRoomLink()">Copier</button>
+    </p>
+    <h2>Participants</h2>
+    <ul id="participants">
+      {{#participants}}
+        <li>{{name}}</li>
+      {{/participants}}
+    </ul>
+    <p>Connecté en tant que <strong>{{currentName}}</strong></p>
+    <h2>Estimation</h2>
+    <div id="deck">
+      <button onclick="vote('1')">1</button>
+      <button onclick="vote('2')">2</button>
+      <button onclick="vote('3')">3</button>
+      <button onclick="vote('5')">5</button>
+      <button onclick="vote('8')">8</button>
+      <button onclick="vote('13')">13</button>
+      <button onclick="vote('?')">?</button>
+    </div>
+
+    <p>
+      <button onclick="revealVotes()">Révéler les votes</button>
+    </p>
+
+    <ul id="vote-results"></ul>
+    <p><a href="/">← Retour</a></p>
+    <script>
+      function copyRoomLink() {
+        const link = document.getElementById('room-link').innerText;
+        navigator.clipboard.writeText(link).then(() => {
+          alert('Lien copié dans le presse-papiers !');
+        });
+      }
+    </script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+      const roomId = '{{roomId}}';
+      const pseudo = '{{currentName}}';
+      const participantId = '{{participantId}}';
+      
+      socket.emit('join-room', { roomId, pseudo });
+
+      // Remplacer toute la liste au début
+      socket.on('room-participants', ({ participants }) => {
+        const ul = document.getElementById('participants');
+        ul.innerHTML = ''; // reset
+        participants.forEach((p) => {
+          const li = document.createElement('li');
+          li.innerText = p.name;
+          ul.appendChild(li);
+        });
+      });
+
+      // Mise à jour live
+      socket.on('participant-joined', ({ name }) => {
+        const ul = document.getElementById('participants');
+        const li = document.createElement('li');
+        li.innerText = name;
+        ul.appendChild(li);
+      });
+
+      socket.on('participant-left', ({ name }) => {
+        const ul = document.getElementById('participants');
+        const items = ul.getElementsByTagName('li');
+        for (const item of items) {
+          if (item.innerText === name) {
+            ul.removeChild(item);
+            break;
+          }
+        }
+      });
+
+      socket.on('votes-revealed', ({ votes }) => {
+        const ul = document.getElementById('vote-results');
+        ul.innerHTML = '';
+        votes.forEach(([pid, value]) => {
+          const li = document.createElement('li');
+          li.innerText = `Participant ${pid} : ${value}`;
+          ul.appendChild(li);
+        });
+      });
+
+      socket.on('participant-voted', ({ participantId }) => {
+        console.log(`🔒 ${participantId} a voté`);
+      });
+
+      function vote(value) {
+        console.log(`🔒 Envoi ${pseudo} a voté ${value}`);
+        socket.emit('vote', { roomId, participantId, value });
+      }
+
+      function revealVotes() {
+        socket.emit('reveal-votes', roomId);
+      }
+
+
+    </script>
   </body>
 </html>

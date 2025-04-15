@@ -5,6 +5,7 @@ import path from 'path'
 import dotenv from 'dotenv'
 
 import indexRoutes from './routes/index'
+import roomRoutes from './routes/room';
 
 dotenv.config()
 
@@ -28,5 +29,6 @@ app.use(
 
 // Routes
 app.use('/', indexRoutes)
+app.use('/room', roomRoutes);
 
 export default app

@@ -5,16 +5,24 @@
   </head>
   <body>
     <h1>Bienvenue sur Estim8</h1>
-    {{#pseudo}}
-      <p>Bonjour {{pseudo}} ! <a href="/room">Rejoindre la room</a></p>
-    {{/pseudo}}
-    {{^pseudo}}
-      <form method="POST" action="/join">
-        <label for="pseudo">Entrez votre pseudo :</label>
-        <input type="text" name="pseudo" id="pseudo" />
-        <button type="submit">Rejoindre</button>
-      </form>
-      {{#error}}<p style="color: red;">{{error}}</p>{{/error}}
-    {{/pseudo}}
+
+    {{#error}}<p style="color: red;">{{error}}</p>{{/error}}
+
+    <form method="POST" action="/join">
+      <label>Pseudo :</label>
+      <input type="text" name="pseudo" value="{{pseudo}}" required />
+
+      <div>
+        <button type="submit" name="action" value="create">Créer une room</button>
+      </div>
+
+      <hr />
+
+      <label>Code de room :</label>
+      <input type="text" name="roomCode" placeholder="ex: green-tiger-12" value="{{prefillRoomCode}}" />
+      <div>
+        <button type="submit" name="action" value="join">Rejoindre une room</button>
+      </div>
+    </form>
   </body>
 </html>

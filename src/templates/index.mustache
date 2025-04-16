@@ -14,27 +14,29 @@
       <h1 class="text-lg title-font">Bienvenue sur {{siteName}}</h1>
     </div>
     {{#error}}<p style="color: red;">{{error}}</p>{{/error}}
-    <div class="mt-40 mx-auto w-96 p-4 bg-white shadow-md rounded-lg text-font text-base">
+    <div class="mt-40 mx-auto w-96 p-4 bg-white shadow-md rounded-sm text-font text-base">
       <form id="index-form" method="POST" action="/join">
 
         <div class="mb-3">
-          <label class="block text-center font-bold">Pseudo</label>
+          <label class="block text-center font-bold select-none">Pseudo</label>
         </div>
         <div >
           <input class="w-full text-center border border-gray-300 px-2 py-1 rounded-sm outline-none" autocomplete="off" type="text" name="pseudo" value="{{pseudo}}" required />
         </div>
         <div class="mb-3 mt-4 flex flex-row">
           <div class="basis-1/2 text-center">
-            <input onClick="index_radio_clicked()" type="radio" name="action" value="create" id="create" checked />&nbsp;Créer une room
+            <input class="cursor-pointer" onClick="index_radio_clicked()" type="radio" name="action" value="create" id="create" checked />&nbsp;
+            <label class="cursor-pointer select-none" for="create">Créer une room</label>
           </div>
           <div class="basis-1/2 text-center">
-            <input onClick="index_radio_clicked()" type="radio" name="action" value="join" id="join" />&nbsp;Rejoindre une room
+            <input class="cursor-pointer" onClick="index_radio_clicked()" type="radio" name="action" value="join" id="join" />&nbsp;
+            <label class="cursor-pointer select-none" for="join">Rejoindre une room</label>
           </div>
         </div>
         <hr />
         <div id="join-room-div" class="mb-2 mt-4" style="display: none;">
           <div class="mb-3">
-            <label class="block text-center font-bold">Code de la room</label>
+            <label class="block text-center font-bold select-none">Code de la room</label>
           </div>
           <div >
             <input id="join-room-input" class="w-full text-center border border-gray-300 px-2 py-1 rounded-sm outline-none" placeholder="ex: green-tiger-12" autocomplete="off" type="text" name="roomCode" value="{{prefillRoomCode}}" />
@@ -42,7 +44,7 @@
           <hr class="mt-3 mb-3"/>
         </div>
         <div>
-          <button id="submit-button" class="border border-sky-700 px-3 block w-full bg-sky-600 text-white py-2" type="submit" name="action" value="join">Créer une room</button>
+          <button id="submit-button" class="cursor-pointer rounded-sm border border-sky-700 px-3 block w-full bg-sky-600 text-white py-2" type="submit" name="action" value="join">Créer une room</button>
         </div>
       </form>
     </div>

@@ -1,11 +1,14 @@
 import { Router, Request, Response } from 'express';
 import RoomManager from '../core/RoomManager';
+import Configuration from '../configuration/Configuration';
 
 const router = Router();
 
 // Formulaire de création
 router.get('/new', (_req: Request, res: Response) => {
-  res.render('create-room');
+  res.render('create-room',{
+    siteName: Configuration.getSiteName(),
+  });
 });
 
 // Création de room

@@ -19,6 +19,15 @@ class RoomManager {
     return this.rooms.get(id);
   }
 
+  getRoomByName(name: string): Room | undefined {
+    for (const room of this.rooms.values()) {
+      if (room.name === name) {
+        return room;
+      }
+    }
+    return undefined;
+  }
+
   joinRoom(roomId: string, participantName: string): Participant | null {
     const room = this.rooms.get(roomId);
     if (!room) return null;

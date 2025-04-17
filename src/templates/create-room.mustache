@@ -1,15 +1,32 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Créer une Room - Estim8</title>
+    <title>{{siteName}} - Accueil</title>
+    <link href="/css/main.css" rel="stylesheet" />
+    <link href="/css/site.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alata&family=Roboto:ital,wght@0,200;1,200&display=swap" rel="stylesheet">
   </head>
-  <body>
-    <h1>Créer une Room</h1>
-    <form method="POST" action="/room/new">
-      <label for="roomName">Nom de la room :</label>
-      <input type="text" name="roomName" id="roomName" required />
-      <button type="submit">Créer</button>
-    </form>
-    <p><a href="/">← Retour</a></p>
+  <body class="bg-white text-gray-800 gradient-background">
+    <div class="bg-sky-900 text-white p-2 shadow">
+      <h1 class="text-lg title-font">Bienvenue sur {{siteName}}</h1>
+    </div>
+    <div class="mt-40 mx-auto w-96 p-4 bg-white shadow-md rounded-sm text-font text-base">
+      <form method="POST" action="/room/new">
+        <div class="mb-3">
+          <label class="block text-center font-bold select-none">Nom de la room :</label>
+        </div>
+        <div class="mb-3">
+          <input class="w-full text-center border border-gray-300 px-2 py-1 rounded-sm outline-none" autocomplete="off" type="text" id="roomName" name="roomName" value="" required />
+        </div>
+        <button id="submit-button" class="cursor-pointer rounded-sm border border-sky-700 px-3 block w-full bg-sky-600 text-white py-2" type="submit">Créer la room</button>
+      </form>
+      <div class="pt-2">
+      <a href="/" class=" text-sm italic">⬅️ Retour à l'accueil</a>
+      </div>
+    </div>
+    <script src="/js/index.js"></script>
   </body>
 </html>
